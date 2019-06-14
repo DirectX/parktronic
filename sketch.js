@@ -4,7 +4,7 @@ let img;
 
 function setup() {
     createCanvas(width, height);
-    img = loadImage('/car.png');
+    img = loadImage('car.png');
 }
 
 function draw() {
