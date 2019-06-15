@@ -1,16 +1,38 @@
 let width = 1024;
 let height = 768;
-let img;
+let carWidth = 192;
+let carHeight = 387;
+let carImages = [];
+let carParams = [];
+const CAR_X = 0;
+const CAR_Y = 1;
+const CAR_ANGLE = 2;
+const CAR_SPEED = 3;
+const CAR_ACCEL = 4;
+const CAR_STEER = 5;
+const CAR_OFFSET = 6;
 
 function setup() {
     createCanvas(width, height);
-    img = loadImage('car.png');
+    textSize(20);
+    textAlign(LEFT, TOP);
+    imageMode(CENTER);
+
+    for (let i = 1; i <= 5; i++) {
+        carImages.push(loadImage(`/assets/cars/car-0${i}.png`));
+        carParams.push([width / 2, height / 2, 5.0, 0.0, 0.0, 0.0, 0.75]);
+    }
 }
 
 function draw() {
-    background(255);
+    background(200);
     
-    drawCar(mouseX, mouseY, mouseX * PI  / 180);
+    drawCar(0, mouseX, mouseY, mouseX * PI  / 180);
+    moveCar(0);
+
+    resetMatrix();
+    text(`Speed: ${carParams[0][CAR_SPEED]}`, 10, 10);
+    text(`Steering: ${carParams[0][CAR_STEER]}`, 10, 40);
     // if (mouseIsPressed) {
     //     fill(0);
     // } else {
@@ -19,9 +41,39 @@ function draw() {
     // ellipse(mouseX, mouseY, 80, 80);
 }
 
-function drawCar(x, y, phi) {
-    translate(x - 192 / 2, y - 364 / 2);
-    rotate(phi);
-    imageMode(CENTER);
-    image(img, x - 192 / 2, y - 364 / 2, 192, 364);
+function keyPressed() {
+    switch (key) {
+        case 'j':
+            carParams[0][CAR_STEER] -= 0.05;
+            break;
+        case 'l':
+            carParams[0][CAR_STEER] += 0.05;
+            break;
+        case 'i':
+            carParams[0][CAR_SPEED] += 0.2;
+            break;
+        case 'k':
+            carParams[0][CAR_SPEED] -= 0.2;
+            break; 
+        }
+  }
+
+function drawCar(index) {
+    translate(carParams[index][CAR_X], carParams[index][CAR_Y] + carHeight / 2 * carParams[index][CAR_OFFSET]);
+    rotate(radians(carParams[index][CAR_ANGLE]));
+    image(carImages[index], 0, -carHeight / 2 * carParams[index][CAR_OFFSET], carWidth, carHeight); //x - 192 / 2, y - 364 / 2, 192, 364);
+    resetMatrix();
+    // translate(carParams[index][CAR_X], carParams[index][CAR_Y]);
+    // translate(0, 0);
+}
+
+function moveCar(index) {
+    carParams[index][CAR_ANGLE] = carParams[index][CAR_ANGLE] + carParams[index][CAR_STEER];
+    carParams[index][CAR_SPEED] = carParams[index][CAR_SPEED] + carParams[index][CAR_ACCEL];
+    carParams[index][CAR_X] = carParams[index][CAR_X] + carParams[index][CAR_SPEED] * sin(radians(carParams[index][CAR_ANGLE]))
+    carParams[index][CAR_Y] = carParams[index][CAR_Y] - carParams[index][CAR_SPEED] * cos(radians(carParams[index][CAR_ANGLE]))
+    //translate(x - 192 / 2, y - 364 / 2);
+    //rotate(phi);
+    //imageMode(CENTER);
+    //image(carImages[index], carParams[index][0], carParams[index][1], carWidth, carHeight); //x - 192 / 2, y - 364 / 2, 192, 364);
 }
