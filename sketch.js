@@ -161,8 +161,8 @@ function moveCar(index) {
     carRender[index][CAR_RIGHT_WHEEL_ANGLE] = rightWheelAngle;
 
     carParams[index][CAR_ANGLE] = carParams[index][CAR_ANGLE] + dAngle; //carParams[index][CAR_STEER]; //carParams[index][CAR_ANGLE] + carParams[index][CAR_STEER] * 0.01 * carParams[index][CAR_SPEED];
-    carParams[index][CAR_X] = carParams[index][CAR_X] + dx; //carParams[index][CAR_SPEED] * sin(radians(carParams[index][CAR_ANGLE]))
-    carParams[index][CAR_Y] = carParams[index][CAR_Y] + dy; // - carParams[index][CAR_SPEED] * cos(radians(carParams[index][CAR_ANGLE]))
+    carParams[index][CAR_X] = carParams[index][CAR_X] + carParams[index][CAR_SPEED] * sin(radians(carParams[index][CAR_ANGLE]));
+    carParams[index][CAR_Y] = carParams[index][CAR_Y] - carParams[index][CAR_SPEED] * cos(radians(carParams[index][CAR_ANGLE]));
     //translate(x - 192 / 2, y - 364 / 2);
     //rotate(phi);
     //imageMode(CENTER);
